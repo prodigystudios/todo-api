@@ -5,14 +5,16 @@
         <h4 class="title-text">{{ t.title }}</h4>
         <img class="checkmark checkmark-grayscale" src="../assets/CheckMark.png" width="30" height="30"
           alt="Checkmark" />
-        <button class="delete-btn" @click="deleteTodo(t.id)"><img src="../assets/cross.jpg" width="30" height="30"
-            alt="cross" /></button>
+        <button class="delete-btn" @click="deleteTodo(t.id)">
+          <img src="../assets/cross.jpg" width="30" height="30" alt="cross" />
+        </button>
       </li>
       <li v-else @click="setCompleted(t.id)" class="list-items list-items-completed">
         <h4 class="title-text">{{ t.title }}</h4>
         <img class="checkmark" src="../assets/CheckMark.png" width="30" height="30" alt="Checkmark" />
-        <button class="delete-btn" @click="deleteTodo(t.id)"><img src="../assets/cross.jpg" width="30" height="30"
-            alt="cross" /></button>
+        <button class="delete-btn" @click="deleteTodo(t.id)">
+          <img src="../assets/cross.jpg" width="30" height="30" alt="cross" />
+        </button>
       </li>
     </div>
   </ol>
@@ -20,75 +22,66 @@
 </template>
 
 <script>
-
 export default {
-  name: 'HelloWorld',
+  name: "GetTodos",
   data() {
     return {
       todos: [],
-    }
-  },
-  name: 'HelloWorld',
-  props: {
-    msg: String
+    };
   },
   created() {
-    fetch('http://localhost:5262/api/Posts')
-      .then(response => response.json())
-      .then(data => {
-        this.todos = data
-        console.log(this.todos)
-      })
+    fetch("http://localhost:5262/api/Posts")
+      .then((response) => response.json())
+      .then((data) => {
+        this.todos = data;
+      });
   },
   methods: {
-
     getObjFromApi() {
-      fetch('http://localhost:5262/api/Posts')
-        .then(response => response.json())
-        .then(data => {
-          this.todos = data
-        })
+      fetch("http://localhost:5262/api/Posts")
+        .then((response) => response.json())
+        .then((data) => {
+          this.todos = data;
+        });
     },
 
     deleteTodo(id) {
-      fetch('http://localhost:5262/api/Posts/' + id, {
-        method: 'DELETE'
-      })
-        .then(() => {
-          this.getObjFromApi()
-        })
+      fetch("http://localhost:5262/api/Posts/" + id, {
+        method: "DELETE",
+      }).then(() => {
+        this.getObjFromApi();
+      });
     },
     deleteAll() {
-      this.todos.forEach(todo => {
-        fetch('http://localhost:5262/api/Posts/' + todo.id, {
-          method: 'DELETE'
-        })
-          .then(() => {
-            this.getObjFromApi()
-          })
-      })
+      this.todos.forEach((todo) => {
+        fetch("http://localhost:5262/api/Posts/" + todo.id, {
+          method: "DELETE",
+        }).then(() => {
+          this.getObjFromApi();
+        });
+      });
     },
 
     setCompleted(id) {
-      const singelPost = this.todos.find(todo => todo.id == id)
+      const singelPost = this.todos.find((todo) => todo.id == id);
 
       if (singelPost.isCompleted == true) {
-        singelPost.isCompleted = false
+        singelPost.isCompleted = false;
       } else {
-        singelPost.isCompleted = true
+        singelPost.isCompleted = true;
       }
 
-      fetch('http://localhost:5262/api/Posts/' + id, {
-        method: 'PUT',
+      fetch("http://localhost:5262/api/Posts/" + id, {
+        method: "PUT",
         body: JSON.stringify(singelPost),
-        headers: { 'Content-Type': 'application/json' }
-      })
-    }
+        headers: { "Content-Type": "application/json" },
+      });
+    },
   },
 }
 
-
 </script>
+
 <style scoped>
 ol
 {
@@ -174,7 +167,7 @@ ol
 
 .deleteAll-btn:hover
 {
-  opacity: .75;
+  opacity: 0.75;
 }
 
 .checkmark-grayscale

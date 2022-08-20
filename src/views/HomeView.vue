@@ -4,18 +4,18 @@
       placeholder="Vad behöver du göra?" v-model="title" />
   </div>
   <div>
-    <HelloWorld :key="todoKey" />
+    <get-todos :key="todoKey"/>
   </div>
 </template>
 
 <script>
-import HelloWorld from '@/components/HelloWorld.vue'
+import GetTodos from '@/components/GetTodos.vue'
 export default {
-  name: 'HomeView',
+  name: 'test',
 
   components: {
-    HelloWorld
-  },
+    GetTodos,
+},
   data() {
     return {
       title: '',
