@@ -27,7 +27,7 @@ export default {
       const todo = {
         title: this.title
       }
-      fetch('http://localhost:5113/api/Todo', {
+      fetch('http://localhost:5262/api/Posts', {
         method: 'POST',
         body: JSON.stringify(todo),
         headers: { 'content-type': 'application/json' },

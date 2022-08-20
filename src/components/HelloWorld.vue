@@ -1,14 +1,14 @@
 <template>
   <ol>
     <div class="wrapper" v-for="t in todos" :key="t.id">
-      <li v-if="!t.isCompleted" @click="t.isCompleted = true" class="list-items">
+      <li v-if="!t.isCompleted" @click="setCompleted(t.id)" class="list-items">
         <h4 class="title-text">{{ t.title }}</h4>
         <img class="checkmark checkmark-grayscale" src="../assets/CheckMark.png" width="30" height="30"
           alt="Checkmark" />
         <button class="delete-btn" @click="deleteTodo(t.id)"><img src="../assets/cross.jpg" width="30" height="30"
             alt="cross" /></button>
       </li>
-      <li v-else @click="t.isCompleted = false" class="list-items list-items-completed">
+      <li v-else @click="setCompleted(t.id)" class="list-items list-items-completed">
         <h4 class="title-text">{{ t.title }}</h4>
         <img class="checkmark" src="../assets/CheckMark.png" width="30" height="30" alt="Checkmark" />
         <button class="delete-btn" @click="deleteTodo(t.id)"><img src="../assets/cross.jpg" width="30" height="30"
@@ -25,7 +25,6 @@ export default {
   name: 'HelloWorld',
   data() {
     return {
-      isCompleted: false,
       todos: [],
     }
   },
@@ -34,16 +33,17 @@ export default {
     msg: String
   },
   created() {
-    fetch('http://localhost:5113/api/Todo')
+    fetch('http://localhost:5262/api/Posts')
       .then(response => response.json())
       .then(data => {
         this.todos = data
+        console.log(this.todos)
       })
   },
   methods: {
 
     getObjFromApi() {
-      fetch('http://localhost:5113/api/Todo')
+      fetch('http://localhost:5262/api/Posts')
         .then(response => response.json())
         .then(data => {
           this.todos = data
@@ -51,7 +51,7 @@ export default {
     },
 
     deleteTodo(id) {
-      fetch('http://localhost:5113/api/Todo/' + id, {
+      fetch('http://localhost:5262/api/Posts/' + id, {
         method: 'DELETE'
       })
         .then(() => {
@@ -60,20 +60,38 @@ export default {
     },
     deleteAll() {
       this.todos.forEach(todo => {
-        fetch('http://localhost:5113/api/Todo/' + todo.id, {
+        fetch('http://localhost:5262/api/Posts/' + todo.id, {
           method: 'DELETE'
         })
           .then(() => {
             this.getObjFromApi()
           })
       })
+    },
+
+    setCompleted(id) {
+      const singelPost = this.todos.find(todo => todo.id == id)
+
+      if (singelPost.isCompleted == true) {
+        singelPost.isCompleted = false
+      } else {
+        singelPost.isCompleted = true
+      }
+
+      fetch('http://localhost:5262/api/Posts/' + id, {
+        method: 'PUT',
+        body: JSON.stringify(singelPost),
+        headers: { 'Content-Type': 'application/json' }
+      })
     }
   },
 }
 
+
 </script>
 <style scoped>
-ol {
+ol
+{
   display: flex;
   flex-direction: column;
 }
@@ -87,7 +105,7 @@ ol {
 {
   display: grid;
   width: 100%;
-  gap:20px;
+  gap: 20px;
   margin-bottom: 20px;
   grid-template-columns: 1fr;
   grid-template-rows: 1fr;
